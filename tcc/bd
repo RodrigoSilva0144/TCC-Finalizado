@@ -1,0 +1,40 @@
+Controller
+   public function __construct($model) {
+       $this->model = $model;
+   }
+
+   public function getImages(int $id) {
+       $images = $this->model->getImagesByProdutoId($id);
+
+       // Aqui você pode passar as imagens para a view ou realizar outras operações.
+       // Por exemplo, você pode retornar JSON para uma API ou renderizar uma página HTML.
+
+       
+       include 'View/Modules/Produto/destination.php';
+   }
+
+
+model
+    public function getImagesByProdutoId(int $id) {
+        $query = "SELECT FROM images WHERE produto_id = :produto_id";
+        $stmt = $this->conexao->prepare($query);
+        $stmt->bindParam(':produto_id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+}
+
+dao 
+
+public function selectById(int $id)
+    {
+        include_once 'Model/ProdutoModel.php';
+        $sql = "SELECT * FROM produtos INNER JOIN images ON produtos.id = images.produto_id WHERE id = ?";
+
+        $stmt = $this->conexao->prepare($sql);
+        $stmt->bindValue(1, $id);
+        $stmt->execute();
+
+        return $stmt->fetchObject("ProdutoModel");
+    }
